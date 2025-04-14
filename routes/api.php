@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Contollers\BookController;
+use App\Http\Controllers\BooksController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/user', function (Request $request) {

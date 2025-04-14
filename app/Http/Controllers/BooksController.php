@@ -1,9 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Resource\BookResources;
+use App\Http\Resources\BooksResource;
+use App\Models\Book;
+
 
 class BooksController extends Controller
 {
@@ -13,8 +14,15 @@ class BooksController extends Controller
     public function index()
     {   //returns raw eloquent model data 
         //return Book::all(); 
-        return BooksResource::collection(Book::all());
+        //return BooksResource::collection(Book::all());
         //wraps each book with custom logic data from BooksResource
+
+        $books = Book::query()
+        ->orderBy('published_year', 'desc')
+        ->orderBy('title', 'asc')
+        ->get(); 
+      return BooksResource::collection($books);
+
     }
 
     /**
@@ -45,7 +53,7 @@ class BooksController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Book $book)
     {
         $request->validate([
             'title' => 'string|max:255',
@@ -62,7 +70,7 @@ class BooksController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Book $book)
     {
         $book->delete();
         return response()->json(null, 204);
